@@ -20,17 +20,18 @@ public class UsuarioService {
 
     public final IUsuarioRepository iUsuarioRepository;
 
-    public UsuarioService(IUsuarioRepository iUsuarioRepository){
+    public UsuarioService(IUsuarioRepository iUsuarioRepository) {
         this.iUsuarioRepository = iUsuarioRepository;
     }
 
     @Transactional
     public UsuarioDTO cadastrarUsuario(UsuarioDTO usuarioDTO) {
-        if (iUsuarioRepository.existsByCpf(usuarioDTO.getCpf()) && (iUsuarioRepository.existsByEmail(usuarioDTO.getEmail()))){
+        if (iUsuarioRepository.existsByCpf(usuarioDTO.getCpf())
+                && (iUsuarioRepository.existsByEmail(usuarioDTO.getEmail()))) {
             throw new RuntimeException("CPF e EMAIL já cadastrados no sistema!");
-        } else if ((iUsuarioRepository.existsByCpf(usuarioDTO.getCpf()))){
+        } else if ((iUsuarioRepository.existsByCpf(usuarioDTO.getCpf()))) {
             throw new CpfExistenteException();
-        }else if((iUsuarioRepository.existsByEmail(usuarioDTO.getEmail()))){
+        } else if ((iUsuarioRepository.existsByEmail(usuarioDTO.getEmail()))) {
             throw new EmailExistenteException();
         }
 
@@ -61,10 +62,9 @@ public class UsuarioService {
     }
 
     @Transactional
-    public UsuarioDTO atualizarPessoa(Long id, UsuarioDTO usuarioDTO){
-       UsuarioModel usuarioModelExistente = iUsuarioRepository.findById(id)
-               .orElseThrow(UsuarioNaoEncontrado::new);
-
+    public UsuarioDTO atualizarPessoa(Long id, UsuarioDTO usuarioDTO) {
+        UsuarioModel usuarioModelExistente = iUsuarioRepository.findById(id)
+                .orElseThrow(UsuarioNaoEncontrado::new);
 
         usuarioModelExistente.setNome(usuarioDTO.getNome());
         usuarioModelExistente.setCpf(usuarioDTO.getCpf());
@@ -78,8 +78,8 @@ public class UsuarioService {
     }
 
     @Transactional
-    public  void deletarUsuario(Long id){
-        if (!iUsuarioRepository.existsById(id)){
+    public void deletarUsuario(Long id) {
+        if (!iUsuarioRepository.existsById(id)) {
             throw new UsuarioNaoEncontrado("Pessoa com ID " + id + " não encontrada para exclusão.");
         }
         iUsuarioRepository.deleteById(id);
@@ -98,12 +98,12 @@ public class UsuarioService {
         return userdto;
     }
 
-    private UsuarioModel mapToModel(UsuarioDTO usuarioDTO){
+    private UsuarioModel mapToModel(UsuarioDTO usuarioDTO) {
         UsuarioModel usuarioModel = new UsuarioModel();
 
-       // if (usuarioDTO.getId() != null){
-       //     usuarioModel.setId(usuarioDTO.getId());
-      //  }
+        // if (usuarioDTO.getId() != null){
+        // usuarioModel.setId(usuarioDTO.getId());
+        // }
         usuarioModel.setNome(usuarioDTO.getNome());
         usuarioModel.setCpf(usuarioDTO.getCpf());
         usuarioModel.setEmail(usuarioDTO.getEmail());
@@ -111,6 +111,5 @@ public class UsuarioService {
         usuarioModel.setTelefone(usuarioDTO.getTelefone());
         return usuarioModel;
     }
-
 
 }
